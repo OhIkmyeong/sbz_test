@@ -15,8 +15,7 @@ export function add_scroll_event() {
 
             switch (currIdx) {
                 case 0: {
-                    const LIMIT = winHei - 270;
-                    if(top < LIMIT){return 270}
+                    if(top < 0){return 0}
                     return top;
                 } break;
                 case 1: {
@@ -37,7 +36,8 @@ export function add_scroll_event() {
         const get_top_second = (currIdx) => {
             switch (currIdx) {
                 case 0: {
-                    return winHei - 180
+                    const LIMIT = winHei - 180; 
+                    return LIMIT;
                 } break;
                 case 1: {
                     const top = (winHei * 2) - sc - 90;
