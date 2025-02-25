@@ -5,6 +5,7 @@ import { $main, $$ac, CURR_SHOW_IDX, LIMIT_SHOW_IDX, change_curr_show_idx, scKic
  */
 export function add_scroll_event() {
     window.addEventListener("scroll", () => {
+        if(window.innerWidth < 600){ return; }
         const scKick = Array.from($$ac).map($ac => Number($ac.dataset.scrollKick));
         const scY = window.scrollY;
         const winHei = window.innerHeight;
@@ -81,13 +82,13 @@ export function add_scroll_event() {
         const get_top_fourth = (currIdx) => {
             switch (currIdx) {
                 case 0:{
-                    return winHei + 90
+                    return winHei;
                 } break;
                 case 1: {
                     return winHei;
                 } break;
                 case 2: {
-                    return winHei - 90;
+                    return winHei ;
                 } break;
                 case 3: {
                     const top = (winHei * 4) - sc - 90;
@@ -103,16 +104,16 @@ export function add_scroll_event() {
         const get_top_fifth = (currIdx) => {
             switch (currIdx) {
                 case 0: { 
-                    return winHei + 180;
+                    return winHei + 90;
                 } break;
                 case 1: { 
                     return winHei + 90;
                 } break;
                 case 2: { 
-                    return winHei;
+                    return winHei + 90;
                 } break;
                 case 3: { 
-                    return winHei - 90;
+                    return winHei;
                 } break;
                 case 4: {
                     const top = (winHei * 5) - sc - 90;

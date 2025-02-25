@@ -57,6 +57,14 @@ export function add_on_click_btn() {
     $$ac.forEach($ac => {
         const $btn = $ac.querySelector(".ac-btn");
         $btn.addEventListener("click", () => {
+            const winWid = window.innerWidth;
+            if(winWid < 600){
+                $ac.scrollIntoView({
+                    block : "start",
+                    behavior : "smooth"
+                })
+                return;
+            }
             const idx = parseInt($btn.dataset.idx || "0");
             const winHei = window.innerHeight;
             window.scrollTo({
