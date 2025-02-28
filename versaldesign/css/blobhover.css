@@ -1,0 +1,43 @@
+#blbhover-wrap{
+    position:relative;
+    width:100%;
+    background:#eee;
+    padding:40px;
+}
+
+#blbhover{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap:20px;
+    position:relative;
+    width:100%;
+}
+
+.bl-li{
+    display:flex;flex-flow:column nowrap;
+    justify-content:flex-end; align-items:flex-start;
+    position:relative; overflow:hidden;
+    width:100%;
+    padding:40px;
+    aspect-ratio:10/13;
+    background:#fff;
+    border-radius:20px;
+}
+
+.bl-svg{
+    position:absolute;
+    width:50%;height:auto;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%) scale(0);
+    opacity:0;
+    transition:all .7s;
+}
+
+.bl-li:hover .bl-svg{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(10);
+}
+
+.bl-li-text{
+    position:relative;
+}

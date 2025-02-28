@@ -1,0 +1,9 @@
+https://www.versaldesign.cl/
+
+- marquee
+- 스크롤 이미지 변경 (4개 오버레이 사이즈 변화)
+- 스크롤 텍스트 효과 (한단어씩 나타남)
+
+https://www.navercorp.com/tech/techMain
+
+- 목차 변경시 배경색 바뀜

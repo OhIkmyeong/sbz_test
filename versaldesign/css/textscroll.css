@@ -1,0 +1,27 @@
+#txtsc-wrap{
+    position:relative;
+    width:100%;
+    height:350vh;
+    background:linear-gradient(to bottom, #eee 50%, #ccc);
+    background-repeat:repeat;
+    background-size:100% 100vh;
+}
+
+#txtsc{
+    display:flex;flex-flow:row wrap;
+    justify-content:center; align-items:center;
+    gap:20px;
+    position:sticky;
+    top:0;left:0;
+    width:100%;
+    height:100vh;
+}
+
+.txtsc-word{
+    opacity:0;
+    transition:opacity .5s;
+    font-size:3vw;
+}
+.txtsc-word.show{
+    opacity:1;
+}

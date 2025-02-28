@@ -1,0 +1,36 @@
+#mq-wrap{
+    display:flex;flex-flow:row nowrap;
+    justify-content:flex-start; align-items:center;
+    gap:20px;
+    position:relative;
+    width:100%; overflow:hidden;
+    padding:20px 0;
+    background:#ccc;
+}
+.mq{
+    flex:none;
+    display:flex;flex-flow:row nowrap;
+    justify-content:flex-start; align-items:center;
+    gap:2em;
+    position:relative;
+    width:max-content;
+}
+/* .mq:first-child{background:red;} */
+/* .mq:last-child{background:green;} */
+.mq-li{
+    flex:none;
+    position:relative;
+    padding:.5em;
+    background:#fff;
+    border-radius:20px;
+    font-size:clamp(18px,5vw,40px);
+}
+
+@keyframes mqmove {
+    from{
+        transform:translateX(0%);
+    }
+    to{
+        transform:translateX(-100%);
+    }
+}
