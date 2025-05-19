@@ -1,0 +1,287 @@
+<!-- 스타일(common) -->
+<link href="https://www.gg.go.kr/site/gg/common/css/board_hongbo_font.css" rel="stylesheet" />
+<link href="https://www.gg.go.kr/site/gg/common/css/board_hongbo3.css" rel="stylesheet" />
+
+<!-- 스타일(custom) -->
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .kv,
+    .end {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #000;
+        text-transform: uppercase;
+        font-size: 5vw;
+        font-weight: 800;
+        color: yellow;
+    }
+
+    /*  */
+    .sect {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        background: black;
+    }
+
+    .sect.pc {
+        /* height: calc(80vh * 5); */
+    }
+
+    /*  */
+    .area {
+        width: 100%;
+        padding: 40px;
+        background: #fff;
+        box-shadow: inset 0 0 0px 2px black;
+        will-change: transform;
+    }
+
+    .sect.pc .area {
+        /* position: absolute; */
+        position: relative;
+        overflow: hidden;
+        height: 80vh;
+    }
+
+    .sect.mobile .area {
+        position: relative;
+        padding-bottom: 120px;
+    }
+
+    .sect.pc .area:nth-child(1) {
+        top: 0;
+        background: rgba(255, 255, 255);
+    }
+
+    .sect.pc .area:nth-child(2) {
+        /* top: calc(80vh * 1); */
+        background: rgba(250, 250, 250);
+    }
+
+    .sect.pc .area:nth-child(3) {
+        /* top: calc(80vh * 2); */
+        background: rgba(240, 240, 240);
+    }
+
+    .sect.pc .area:nth-child(4) {
+        /* top: calc(80vh * 3); */
+        background: rgba(230, 230, 230);
+    }
+
+    .sect.pc .area:nth-child(5) {
+        /* top: calc(80vh * 4); */
+        background: rgba(220, 220, 220);
+    }
+
+    /*  */
+    .area-title {
+        position: relative;
+        font-size: clamp(32px, 5vw, 100px);
+    }
+
+    /*  */
+    .area-ctnt {
+        position: relative;
+        line-height: 1.6;
+        ;
+        font-size: 24px;
+    }
+</style>
+
+<!-- 본문 -->
+<div class="board_hongbo3_wrap">
+    <section class="kv">keyvisual</section>
+    <section class="sect pc">
+        <article class="area">
+            <h1 class="area-title">001</h1>
+            <div class="area-ctnt">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+                <p>
+                    Saepe sit molestiae recusandae voluptatum optio reiciendis?
+                </p>
+            </div>
+        </article>
+        <article class="area">
+            <h1 class="area-title">002</h1>
+            <div class="area-ctnt">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+                <p>
+                    Saepe sit molestiae recusandae voluptatum optio reiciendis?
+                </p>
+            </div>
+        </article>
+        <article class="area">
+            <h1 class="area-title">003</h1>
+            <div class="area-ctnt">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+                <p>
+                    Saepe sit molestiae recusandae voluptatum optio reiciendis?
+                </p>
+            </div>
+        </article>
+        <article class="area">
+            <h1 class="area-title">004</h1>
+            <div class="area-ctnt">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+                <p>
+                    Saepe sit molestiae recusandae voluptatum optio reiciendis?
+                </p>
+            </div>
+        </article>
+        <article class="area">
+            <h1 class="area-title">005</h1>
+            <div class="area-ctnt">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+                <p>
+                    Saepe sit molestiae recusandae voluptatum optio reiciendis?
+                </p>
+            </div>
+        </article>
+    </section>
+    <section class="end">ending</section>
+</div>
+
+<!-- 스크립트 -->
+<script>
+    const WIDBREAK = 500;
+    const clssPc = "pc";
+    const clssMb = "mobile";
+    let AREA_INFO = [];
+
+    /** DOM 준비 다 되면 시작 */
+    document.addEventListener("DOMContentLoaded", async () => {
+        const $sect = document.querySelector(".sect");
+        const $$area = document.querySelectorAll(".area");
+
+        /**
+         * 
+         */
+        function set_area_info() {
+            console.log("set_area_info");
+            AREA_INFO = [];
+            $$area.forEach(($area, idx) => {
+                $area.style.transform = "translateY(0px)";
+                const info = {
+                    idx,
+                    top: $area.offsetTop
+                };
+                AREA_INFO.push(info);
+            });
+            console.log(AREA_INFO);
+        }//set_area_info
+
+        /**
+         * 리사이즈시
+         */
+        function add_on_window_resize() {
+            window.addEventListener("resize", on_window_resize);
+        }//add_on_window_resize
+
+        /**
+         * 
+         */
+        function on_window_resize() {
+            set_area_info();
+            const winWid = innerWidth;
+            if (winWid > WIDBREAK) {
+                if ($sect.classList.contains(clssPc)) {
+                    return;
+                }
+                $sect.classList.remove(clssMb);
+                $sect.classList.add(clssPc);
+            } else {
+                if ($sect.classList.contains(clssMb)) {
+                    return;
+                }
+                $sect.classList.remove(clssPc);
+                $sect.classList.add(clssMb);
+
+            }
+        }//on_window_resize
+
+        /**
+         * 스크롤시
+         */
+        function add_on_scroll() {
+            window.addEventListener("scroll", on_scroll)
+        }//add_on_scroll
+
+        /**
+ * 
+ * @returns 
+ */
+        function on_scroll() {
+            if ($sect.classList.contains(clssMb)) { return; }
+            //area의 height가 80vh임
+            const { top: sectTop, height: sectHeight } = $sect.getBoundingClientRect();
+            const sc = sectTop * -1
+            const heiPer = parseInt(innerHeight * 0.8) * -1;
+            const KICK = 150;
+            // console.log(sectTop, heiPer);
+            if (sectTop >= 0) {
+                $$area[0].style.transform = `translateY(0px)`;
+                $$area[1].style.transform = `translateY(0px)`;
+                $$area[2].style.transform = `translateY(0px)`;
+                $$area[3].style.transform = `translateY(0px)`;
+                $$area[4].style.transform = `translateY(0px)`;
+            } else if (sectTop >= heiPer) {
+                const nextTop = $$area[1].getBoundingClientRect().top;
+                const basic = sc;
+                if (nextTop > KICK) {
+                    $$area[0].style.transform = `translateY(${basic}px)`;
+                } else {
+                    $$area[0].style.transform = `translateY(${basic - (KICK - nextTop)}px)`;
+                }
+            } else if (sectTop >= heiPer * 2) {
+                const nextTop = $$area[2].getBoundingClientRect().top;
+                const basic = sc + heiPer;
+                if (nextTop > KICK) {
+                    $$area[1].style.transform = `translateY(${basic}px)`;
+                } else {
+                    $$area[1].style.transform = `translateY(${basic - (KICK - nextTop)}px)`;
+                }
+            } else if (sectTop >= heiPer * 3) {
+                const nextTop = $$area[3].getBoundingClientRect().top;
+                const basic = sc + heiPer * 2;
+                if (nextTop > KICK) {
+                    $$area[2].style.transform = `translateY(${basic}px)`;
+                } else {
+                    $$area[2].style.transform = `translateY(${basic - (KICK - nextTop)}px)`;
+                }
+            } else if (sectTop >= heiPer * 4) {
+                const nextTop = $$area[4].getBoundingClientRect().top;
+                const basic = sc + heiPer * 3;
+                if (nextTop > KICK) {
+                    $$area[3].style.transform = `translateY(${basic}px)`;
+                } else {
+                    $$area[3].style.transform = `translateY(${basic - (KICK - nextTop)}px)`;
+                }
+            }
+        }//on_scroll
+        
+        /* 최종 */
+        on_window_resize();
+        add_on_window_resize();
+        add_on_scroll();
+    });
+</script>
