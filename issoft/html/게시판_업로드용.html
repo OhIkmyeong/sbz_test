@@ -1,0 +1,334 @@
+<!-- 스타일(common) -->
+<link href="/site/gg/common/css/board_hongbo_font.css" rel="stylesheet" />
+<link href="/site/gg/common/css/board_hongbo3.css" rel="stylesheet" />
+
+<!-- 스타일(custom) -->
+<style>
+    @charset "utf-8";
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    img {
+        vertical-align: middle;
+    }
+
+    .slide {
+        outline: 3px dotted black;
+        --_wid-card: 300px;
+        --_hei: 350px;
+        position: relative;
+        width: 100%;
+        max-width: calc(var(--_wid-card) * 2.5);
+        height: var(--_hei);
+        margin: 40px 0 40px auto;
+    }
+
+    .slide-item {
+        overflow: visible;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: var(--_wid-card);
+        height: var(--_hei);
+        color: #000;
+        perspective: 1200px;
+        transform-style: preserve-3d;
+    }
+
+    /* .slide-item:not(.on) {
+    left: var(--_wid-card);
+    transform: translateX(calc(var(--_idx) * 12%))
+} */
+
+    /* 카드 */
+    .slide-item-card {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        width: var(--_wid-card);
+        height: var(--_hei);
+        padding: 20px;
+        background: #fafafc;
+        border: 2px solid black;
+        border-radius: 12px;
+        text-align: left;
+        color: #000;
+        transition: background .2s linear, color .2s linear, transform .2s linear;
+    }
+
+    .slide-item.on .slide-item-card {
+        background: #000;
+        color: yellow;
+    }
+
+    .slide-item:not(.on) .slide-item-card {
+        transform: rotateY(-30deg);
+    }
+
+    /* 내용물 */
+    .slide-item-card-title {
+        font-weight: 800;
+        font-size: clamp(16px, 10vw, 50px);
+    }
+
+    /* ================= */
+    .pager {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .pager-info {
+        position: relative;
+    }
+
+    .pager-info-curr {
+        font-weight: bold;
+    }
+
+    .pager-info-all {
+        position: relative;
+    }
+
+    .pager-info-all::before {
+        content: "/";
+        margin: 0 .5em;
+    }
+</style>
+
+<!-- 본문 -->
+<div class="board_hongbo3_wrap">
+    <ul class="slide">
+        <li class="slide-item on" style="--_idx: 0; z-index: 6; left: 0px; transform: translateX(calc(0%));">
+            <div class="slide-item-card">
+                <p class="slide-item-card-title">01</p>
+                <p class="slide-item-card-content">test 01</p>
+            </div>
+        </li>
+        <li class="slide-item" style="--_idx: 1; z-index: 5; left: var(--_wid-card); transform: translateX(calc(12%));">
+            <div class="slide-item-card">
+                <p class="slide-item-card-title">02</p>
+                <p class="slide-item-card-content">hello 02</p>
+            </div>
+        </li>
+        <li class="slide-item" style="--_idx: 2; z-index: 4; left: var(--_wid-card); transform: translateX(calc(24%));">
+            <div class="slide-item-card">
+                <p class="slide-item-card-title">03</p>
+                <p class="slide-item-card-content">world 03</p>
+            </div>
+        </li>
+        <li class="slide-item" style="--_idx: 3; z-index: 3; left: var(--_wid-card); transform: translateX(calc(36%));">
+            <div class="slide-item-card">
+                <p class="slide-item-card-title">04</p>
+                <p class="slide-item-card-content">example 04</p>
+            </div>
+        </li>
+        <li class="slide-item" style="--_idx: 4; z-index: 2; left: var(--_wid-card); transform: translateX(calc(48%));">
+            <div class="slide-item-card">
+                <p class="slide-item-card-title">05</p>
+                <p class="slide-item-card-content">bye 05</p>
+            </div>
+        </li>
+    </ul>
+    <section class="pager"><button type="button" class="pager-btn prev" data-action="prev">이전</button>
+        <div class="pager-info"><span class="pager-info-curr">1</span><span class="pager-info-all">5</span></div><button
+            type="button" class="pager-btn next" data-action="next">다음</button>
+    </section>
+</div>
+
+<!-- 스크립트 -->
+<script>
+    /** DOM 준비 다 되면 시작 */
+    document.addEventListener("DOMContentLoaded", async () => {
+        const $wrap = document.querySelector(".board_hongbo3_wrap");
+        const $ul = $wrap.querySelector(".slide");
+        const $$li = Array.from($wrap.querySelectorAll(".slide-item"));
+        const pagerDOM = {
+            btnPrev: $wrap.querySelector(".pager-btn.prev"),
+            btnNext: $wrap.querySelector(".pager-btn.next"),
+            curr: $wrap.querySelector(".pager-info-curr")
+        }
+        let curr_idx = 0;
+        const last_idx = $$li.length - 1;
+
+        /* ================================= */
+
+        /* ================================= */
+
+        /* 버튼 액션 */
+        pagerDOM.btnNext.addEventListener("click", () => {
+            /*  */
+            pagerDOM.btnNext.disabled = true;
+
+            /* idx 정리 */
+            curr_idx++;
+            if (curr_idx > last_idx) {
+                curr_idx = 0;
+            }
+
+            /* pager */
+            pagerDOM.curr.textContent = curr_idx + 1;
+
+            /* 0. 현재 on인거 찾기 */
+            const $on = $$li.shift();
+
+            /* 1. on된걸 왼쪽으로 빼고, 클래스 제거 */
+            $on.classList.remove("on");
+            const onAni = $on.animate([
+                {
+                    transform: "translateX(-100%)",
+                    opacity: 0
+                }
+            ], {
+                duration: 500,
+                fill: "both",
+                easing: "linear"
+            })
+
+            /* 끝나면.. */
+            onAni.addEventListener("finish", () => {
+                /* 2. on된걸 맨 뒤로 추가 */
+                $$li.push($on);
+                $ul.appendChild($on);
+                $on.animate([
+                    {
+                        left: "var(--_wid-card)",
+                        transform: `translateX(calc(12% * ${last_idx}))`,
+                        opacity: 1
+                    }
+                ], {
+                    duration: 100,
+                    fill: "forwards",
+                    easing: "steps(1,end)"
+                });
+
+                /* z-index */
+                $on.style.zIndex = 0;
+            }, { once: true });
+
+            /* 3. 그 다음꺼 on 시킴 */
+            const $next = $$li[0];
+            $next.classList.add("on");
+            const nextAni = $next.animate([
+                {
+                    left: 0,
+                    transform: "translateX(0)"
+                }
+            ], {
+                duration: 500,
+                fill: "both",
+                easing: "linear"
+            });
+
+            /* z-index */
+            $next.style.zIndex = last_idx + 1;
+
+            /* 4. 중간 형제들*/
+            const $$sib = $$li.slice(1, last_idx);
+            $$sib.forEach(($sib, idx) => {
+                $sib.classList.remove("on");
+                $sib.animate([
+                    {
+                        left: "var(--_wid-card)",
+                        transform: `translateX(calc(12% * ${idx + 1}))`
+                    }
+                ], {
+                    duration: 500,
+                    fill: "both",
+                    easing: "linear"
+                });
+                $sib.style.zIndex = last_idx - idx;
+            });
+
+            /* 최종 다시 버튼 클릭 가능 */
+            nextAni.addEventListener("finish", () => {
+                pagerDOM.btnNext.disabled = false;
+            }, { once: true });
+        });
+
+        /* ================================= */
+
+        pagerDOM.btnPrev.addEventListener("click", () => {
+            /*  */
+            pagerDOM.btnPrev.disabled = true;
+
+            /* idx 정리 */
+            curr_idx--;
+            if (curr_idx < 0) {
+                curr_idx = last_idx;
+            }
+
+            /* pager */
+            pagerDOM.curr.textContent = curr_idx + 1;
+
+            /* 0. 현재 on인거 찾기 */
+            const $on = $$li[0];
+
+            /* 1. on 클래스 제거 및, 가장 마지막꺼 제외 오른쪽으로 밀기 */
+            $on.classList.remove("on");
+            const $$sib = $$li.slice(0, last_idx);
+            $$sib.forEach(($sib, idx) => {
+                $sib.classList.remove("on");
+                $sib.animate([
+                    {
+                        left: "var(--_wid-card)",
+                        transform: `translateX(calc(12% * ${idx + 1}))`
+                    }
+                ], {
+                    duration: 500,
+                    fill: "both",
+                    easing: "linear"
+                });
+
+                /* z-index */
+                $sib.style.zIndex = last_idx - idx;
+            });
+
+            /* 2. 맨 마지막꺼 .on 붙이기*/
+            const $last = $$li.pop();
+            $$li.unshift($last);
+            /* 3. 맨 마지막꺼 왼쪽으로 붙였다가, 화면으로 들어오게끔 */
+            const lastAni = $last.animate([
+                {
+                    opacity: 1
+                },
+                {
+                    transform: "translateX(100%)",
+                    opacity: 0
+                },
+                {
+                    left: 0,
+                    transform: "translateX(-50%)",
+                    opacity: 0
+                },
+                {
+                    left: 0,
+                    transform: "translateX(0%)",
+                    opacity: 1
+                }
+            ], {
+                duration: 600,
+                fill: "both",
+                easing: "linear"
+                // easing: "steps(1,end)"
+            });
+
+            lastAni.addEventListener("finish", () => {
+                $last.classList.add("on");
+                $last.style.zIndex = last_idx + 1;
+                /* 최종 다시 버튼 클릭 가능 */
+                pagerDOM.btnPrev.disabled = false;
+            }, { once: true });
+        });
+    });
+</script>

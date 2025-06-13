@@ -1,0 +1,100 @@
+@charset "utf-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    vertical-align: middle;
+}
+
+.slide {
+    outline: 3px dotted black;
+    --_wid-card: 300px;
+    --_hei: 350px;
+    position: relative;
+    width: 100%;
+    max-width: calc(var(--_wid-card) * 2.5);
+    height: var(--_hei);
+    margin: 40px 0 40px auto;
+}
+
+.slide-item {
+    overflow: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--_wid-card);
+    height: var(--_hei);
+    color: #000;
+    perspective: 1200px;
+    transform-style: preserve-3d;
+}
+
+/* .slide-item:not(.on) {
+    left: var(--_wid-card);
+    transform: translateX(calc(var(--_idx) * 12%))
+} */
+
+/* 카드 */
+.slide-item-card {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    width: var(--_wid-card);
+    height: var(--_hei);
+    padding: 20px;
+    background: #fafafc;
+    border: 2px solid black;
+    border-radius: 12px;
+    text-align: left;
+    color: #000;
+    transition:background .2s linear, color .2s linear, transform .2s linear;
+}
+
+.slide-item.on .slide-item-card {
+    background: #000;
+    color: yellow;
+}
+
+.slide-item:not(.on) .slide-item-card {
+    transform: rotateY(-30deg);
+}
+
+/* 내용물 */
+.slide-item-card-title {
+    font-weight: 800;
+    font-size: clamp(16px, 10vw, 50px);
+}
+
+/* ================= */
+.pager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.pager-info {
+    position: relative;
+}
+
+.pager-info-curr {
+    font-weight: bold;
+}
+
+.pager-info-all {
+    position: relative;
+}
+
+.pager-info-all::before {
+    content: "/";
+    margin: 0 .5em;
+}
