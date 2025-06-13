@@ -1,39 +1,60 @@
-@charset "utf-8";
-.slidemobile-wrap{
+.slidemobile-wrap {
     /* overflow: visible; */
-    overflow:hidden;
-    position:relative;
+    overflow: hidden;
+    position: relative;
     margin: 40px auto;
-    width: calc(100% - 80px);
-    height:var(--_hei);
-    background:#ccc;
-    border:2px solid black;
+    width: 100%;
+    max-width: calc(var(--_wid-card) * 3 + (var(--_gap) * 2));
+    height: var(--_hei);
+    background: #ccc;
+    border: 2px solid black;
 }
+
+@container wrap (width > 720px) {
+    .slidemobile-wrap,
+    .pagermobile {
+        display: none;
+    }
+}
+@container wrap (width <= 720px) {
+    .slidemobile-wrap{
+        --_gap:10px;
+        --_wid-card:260px;
+        --_hei:320px;
+    }
+    .slide{
+        display: none;
+    }
+}
+
 .slidemobile {
     overflow: hidden;
     position: absolute;
-    top:0;left:50%;
-    width:calc((var(--_wid-card) * 5) + 80px);
-    height:100%;
-    transform:translateX(-50%);
-    
+    top: 0;
+    left: 50%;
+    width: calc((var(--_wid-card) * 5) + var(--_gap) * 4);
+    height: 100%;
+    transform: translateX(-50%);
+
 }
 
-.slidemobile-item{
-    position:absolute;
-    top:0;
-    width:var(--_wid-card);
-    height:var(--_hei);
+.slidemobile-item {
+    position: absolute;
+    top: 0;
+    width: var(--_wid-card);
+    height: var(--_hei);
 }
 
-.slidemobile-item-card{
-    display:flex; flex-flow:column nowrap;
-    justify-content:center; align-items:center;
-    position:relative;
-    width:var(--_wid-card);
-    height:var(--_hei);
-    background:#fff;
-    border:1px solid black;
-    border-radius:12px;
-        transition:background .2s linear, color .2s linear, transform .2s linear;
+.slidemobile-item-card {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: var(--_wid-card);
+    height: var(--_hei);
+    background: #fff;
+    border: 1px solid black;
+    border-radius: 12px;
+    transition: all .2s .3s linear;
 }

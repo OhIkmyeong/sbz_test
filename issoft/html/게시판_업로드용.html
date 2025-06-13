@@ -16,10 +16,16 @@
         vertical-align: middle;
     }
 
+    .board_hongbo3_wrap {
+        --_wid-max: 1340px;
+        --_wid-card: 370px;
+        --_hei: 485px;
+        --_gap: 20px;
+    }
+
     .slide {
         outline: 3px dotted black;
-        --_wid-card: 300px;
-        --_hei: 350px;
+
         position: relative;
         width: 100%;
         max-width: calc(var(--_wid-card) * 2.5);
@@ -63,7 +69,8 @@
         transition: background .2s linear, color .2s linear, transform .2s linear;
     }
 
-    .slide-item.on .slide-item-card {
+    .slide-item.on .slide-item-card,
+    .slidemobile-item.on .slidemobile-item-card {
         background: #000;
         color: yellow;
     }
@@ -79,7 +86,8 @@
     }
 
     /* ================= */
-    .pager {
+    .pager,
+    .pagermobile {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -88,21 +96,91 @@
         margin-bottom: 40px;
     }
 
-    .pager-info {
+    .pager-info,
+    .pagermobile-info {
         position: relative;
     }
 
-    .pager-info-curr {
+    .pager-info-curr,
+    .pagermobile-info-curr {
         font-weight: bold;
     }
 
-    .pager-info-all {
+    .pager-info-all,
+    .pagermobile-info-all {
         position: relative;
     }
 
-    .pager-info-all::before {
+    .pager-info-all::before,
+    .pagermobile-info-all::before {
         content: "/";
         margin: 0 .5em;
+    }
+</style>
+<style>
+    .slidemobile-wrap {
+        /* overflow: visible; */
+        overflow: hidden;
+        position: relative;
+        margin: 40px auto;
+        width: 100%;
+        max-width: calc(var(--_wid-card) * 3 + (var(--_gap) * 2));
+        height: var(--_hei);
+        background: #ccc;
+        border: 2px solid black;
+    }
+
+    @container wrap (width > 720px) {
+
+        .slidemobile-wrap,
+        .pagermobile {
+            display: none;
+        }
+    }
+
+    @container wrap (width <=720px) {
+        .slidemobile-wrap {
+            --_gap: 10px;
+            --_wid-card: 260px;
+            --_hei: 320px;
+        }
+
+        .slide,
+        .pager {
+            display: none;
+        }
+    }
+
+    .slidemobile {
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: calc((var(--_wid-card) * 5) + var(--_gap) * 4);
+        height: 100%;
+        transform: translateX(-50%);
+
+    }
+
+    .slidemobile-item {
+        position: absolute;
+        top: 0;
+        width: var(--_wid-card);
+        height: var(--_hei);
+    }
+
+    .slidemobile-item-card {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: var(--_wid-card);
+        height: var(--_hei);
+        background: #fff;
+        border: 1px solid black;
+        border-radius: 12px;
+        transition: all .2s .3s linear;
     }
 </style>
 
@@ -144,6 +222,50 @@
         <div class="pager-info"><span class="pager-info-curr">1</span><span class="pager-info-all">5</span></div><button
             type="button" class="pager-btn next" data-action="next">다음</button>
     </section>
+    <div class="slidemobile-wrap">
+        <ul class="slidemobile">
+            <li class="slidemobile-item" data-idx="3"
+                style="opacity: 0; transform: translateX(calc((var(--_wid-card) * 0) + (0 * var(--_gap))));">
+                <div class="slidemobile-item-card">
+                    <p class="slide-item-card-title">04</p>
+                    <p class="slide-item-card-content">example 04</p>
+                </div>
+            </li>
+            <li class="slidemobile-item" data-idx="4"
+                style="transform: translateX(calc((var(--_wid-card) * 1) + (1 * var(--_gap))));">
+                <div class="slidemobile-item-card">
+                    <p class="slide-item-card-title">05</p>
+                    <p class="slide-item-card-content">bye 05</p>
+                </div>
+            </li>
+            <li class="slidemobile-item on" data-idx="0"
+                style="transform: translateX(calc((var(--_wid-card) * 2) + (2 * var(--_gap))));">
+                <div class="slidemobile-item-card">
+                    <p class="slide-item-card-title">01</p>
+                    <p class="slide-item-card-content">test 01</p>
+                </div>
+            </li>
+            <li class="slidemobile-item" data-idx="1"
+                style="transform: translateX(calc((var(--_wid-card) * 3) + (3 * var(--_gap))));">
+                <div class="slidemobile-item-card">
+                    <p class="slide-item-card-title">02</p>
+                    <p class="slide-item-card-content">hello 02</p>
+                </div>
+            </li>
+            <li class="slidemobile-item" data-idx="2"
+                style="opacity: 0; transform: translateX(calc((var(--_wid-card) * 4) + (4 * var(--_gap))));">
+                <div class="slidemobile-item-card">
+                    <p class="slide-item-card-title">03</p>
+                    <p class="slide-item-card-content">world 03</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <section class="pagermobile"><button type="button" class="pagermobile-btn prev" data-action="prev">이전</button>
+        <div class="pagermobile-info"><span class="pagermobile-info-curr">1</span><span
+                class="pagermobile-info-all">5</span></div><button type="button" class="pagermobile-btn next"
+            data-action="next">다음</button>
+    </section>
 </div>
 
 <!-- 스크립트 -->
@@ -151,24 +273,28 @@
     /** DOM 준비 다 되면 시작 */
     document.addEventListener("DOMContentLoaded", async () => {
         const $wrap = document.querySelector(".board_hongbo3_wrap");
-        const $ul = $wrap.querySelector(".slide");
-        const $$li = Array.from($wrap.querySelectorAll(".slide-item"));
-        const pagerDOM = {
+        const $ulPc = $wrap.querySelector(".slide");
+        const $$liPc = Array.from($wrap.querySelectorAll(".slide-item"));
+        const $$liMobile = Array.from($wrap.querySelectorAll(".slidemobile-item"));
+        const pagerDOMpc = {
             btnPrev: $wrap.querySelector(".pager-btn.prev"),
             btnNext: $wrap.querySelector(".pager-btn.next"),
             curr: $wrap.querySelector(".pager-info-curr")
         }
+        const pagerDOMmobile = {
+            btnPrev: $wrap.querySelector(".pagermobile-btn.prev"),
+            btnNext: $wrap.querySelector(".pagermobile-btn.next"),
+            curr: $wrap.querySelector(".pagermobile-info-curr")
+        }
         let curr_idx = 0;
-        const last_idx = $$li.length - 1;
+        let curr_idx_mobile = 0;
+        const last_idx = $$liPc.length - 1;
 
         /* ================================= */
-
-        /* ================================= */
-
-        /* 버튼 액션 */
-        pagerDOM.btnNext.addEventListener("click", () => {
+        /* 버튼 액션(PC)next */
+        pagerDOMpc.btnNext.addEventListener("click", () => {
             /*  */
-            pagerDOM.btnNext.disabled = true;
+            pagerDOMpc.btnNext.disabled = true;
 
             /* idx 정리 */
             curr_idx++;
@@ -177,10 +303,10 @@
             }
 
             /* pager */
-            pagerDOM.curr.textContent = curr_idx + 1;
+            pagerDOMpc.curr.textContent = curr_idx + 1;
 
             /* 0. 현재 on인거 찾기 */
-            const $on = $$li.shift();
+            const $on = $$liPc.shift();
 
             /* 1. on된걸 왼쪽으로 빼고, 클래스 제거 */
             $on.classList.remove("on");
@@ -198,8 +324,8 @@
             /* 끝나면.. */
             onAni.addEventListener("finish", () => {
                 /* 2. on된걸 맨 뒤로 추가 */
-                $$li.push($on);
-                $ul.appendChild($on);
+                $$liPc.push($on);
+                $ulPc.appendChild($on);
                 $on.animate([
                     {
                         left: "var(--_wid-card)",
@@ -217,7 +343,7 @@
             }, { once: true });
 
             /* 3. 그 다음꺼 on 시킴 */
-            const $next = $$li[0];
+            const $next = $$liPc[0];
             $next.classList.add("on");
             const nextAni = $next.animate([
                 {
@@ -234,7 +360,7 @@
             $next.style.zIndex = last_idx + 1;
 
             /* 4. 중간 형제들*/
-            const $$sib = $$li.slice(1, last_idx);
+            const $$sib = $$liPc.slice(1, last_idx);
             $$sib.forEach(($sib, idx) => {
                 $sib.classList.remove("on");
                 $sib.animate([
@@ -252,15 +378,15 @@
 
             /* 최종 다시 버튼 클릭 가능 */
             nextAni.addEventListener("finish", () => {
-                pagerDOM.btnNext.disabled = false;
+                pagerDOMpc.btnNext.disabled = false;
             }, { once: true });
         });
 
         /* ================================= */
-
-        pagerDOM.btnPrev.addEventListener("click", () => {
+        /* 버튼 액션(PC)prev */
+        pagerDOMpc.btnPrev.addEventListener("click", () => {
             /*  */
-            pagerDOM.btnPrev.disabled = true;
+            pagerDOMpc.btnPrev.disabled = true;
 
             /* idx 정리 */
             curr_idx--;
@@ -269,14 +395,14 @@
             }
 
             /* pager */
-            pagerDOM.curr.textContent = curr_idx + 1;
+            pagerDOMpc.curr.textContent = curr_idx + 1;
 
             /* 0. 현재 on인거 찾기 */
-            const $on = $$li[0];
+            const $on = $$liPc[0];
 
             /* 1. on 클래스 제거 및, 가장 마지막꺼 제외 오른쪽으로 밀기 */
             $on.classList.remove("on");
-            const $$sib = $$li.slice(0, last_idx);
+            const $$sib = $$liPc.slice(0, last_idx);
             $$sib.forEach(($sib, idx) => {
                 $sib.classList.remove("on");
                 $sib.animate([
@@ -295,8 +421,8 @@
             });
 
             /* 2. 맨 마지막꺼 .on 붙이기*/
-            const $last = $$li.pop();
-            $$li.unshift($last);
+            const $last = $$liPc.pop();
+            $$liPc.unshift($last);
             /* 3. 맨 마지막꺼 왼쪽으로 붙였다가, 화면으로 들어오게끔 */
             const lastAni = $last.animate([
                 {
@@ -327,8 +453,92 @@
                 $last.classList.add("on");
                 $last.style.zIndex = last_idx + 1;
                 /* 최종 다시 버튼 클릭 가능 */
-                pagerDOM.btnPrev.disabled = false;
+                pagerDOMpc.btnPrev.disabled = false;
             }, { once: true });
+        });
+
+        /* ================================= */
+        /* 버튼 액션(MOBILE)next */
+        pagerDOMmobile.btnNext.addEventListener("click", () => {
+            /*  */
+            pagerDOMmobile.btnNext.disabled = true;
+
+            /* idx 정리 */
+            curr_idx++;
+            if (curr_idx > last_idx) {
+                curr_idx = 0;
+            }
+
+            /* pager */
+            pagerDOMmobile.curr.textContent = curr_idx + 1;
+
+            /* 데이터 변경 */
+            const $first = $$liMobile.shift();
+            $$liMobile.push($first);
+
+            /* 전부 왼쪽으로 한칸씩 이동 */
+            const aniPromise = $$liMobile.map(($li, idx) => {
+                $li.classList.toggle("on", parseInt($li.dataset.idx) === curr_idx);
+                const left = `calc(var(--_wid-card) * ${idx} - (${idx} * -1 * var(--_gap)))`;
+                const ani = $li.animate([
+                    {
+                        transform: `translateX(${left})`,
+                        opacity: (idx === 0 || idx === last_idx) ? 0 : 1
+                    }
+                ], {
+                    fill: "both",
+                    duration: 500,
+                    easing: "linear"
+                });
+                return ani;
+            });
+
+            /*  */
+            Promise.all(aniPromise).then(() => {
+                pagerDOMmobile.btnNext.disabled = false;
+            });
+        });
+
+        /* ================================= */
+        /* 버튼 액션(MOBILE)prev */
+        pagerDOMmobile.btnPrev.addEventListener("click", () => {
+            /*  */
+            pagerDOMmobile.btnPrev.disabled = true;
+
+            /* idx 정리 */
+            curr_idx--;
+            if (curr_idx < 0) {
+                curr_idx = last_idx;
+            }
+
+            /* pager */
+            pagerDOMmobile.curr.textContent = curr_idx + 1;
+
+            /* 데이터 변경 */
+            const $last = $$liMobile.pop();
+            $$liMobile.unshift($last);
+
+            /* 전부 오른른쪽으로 한칸씩 이동 */
+            const aniPromise = $$liMobile.map(($li, idx) => {
+                $li.classList.toggle("on", parseInt($li.dataset.idx) === curr_idx);
+                const left = `calc(var(--_wid-card) * ${idx} + (${idx} * var(--_gap)))`;
+                const ani = $li.animate([
+                    {
+                        transform: `translateX(${left})`,
+                        opacity: (idx === 0 || idx === last_idx) ? 0 : 1
+                    }
+                ], {
+                    fill: "both",
+                    duration: 500,
+                    easing: "linear"
+                });
+                return ani;
+            });
+
+            /*  */
+            Promise.all(aniPromise).then(() => {
+                pagerDOMmobile.btnPrev.disabled = false;
+            });
         });
     });
 </script>

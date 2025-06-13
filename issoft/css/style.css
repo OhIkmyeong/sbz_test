@@ -12,6 +12,7 @@ img {
     --_wid-max:1340px;
     --_wid-card: 370px;
     --_hei: 485px;
+    --_gap:20px;
 }
 
 .slide {

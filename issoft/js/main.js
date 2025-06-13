@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const $$liPc = [];
     const $$liMobile = [];
-    let curr_idx = 0;
-    const last_idx = data.length - 1;
     const pagerDOMpc = {
         btnPrev: null,
         btnNext: null,
@@ -17,6 +15,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnNext: null,
         curr: null
     }
+    let curr_idx = 0;
+    const last_idx = data.length - 1;
 
     /* pc버젼 */
     const { $ulPc } = make_dom_pc({
@@ -30,8 +30,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         data, $$liMobile, pagerDOMmobile, last_idx
     })
 
-    /* ================================= */
+    make_pager({ pagerDOMpc, last_idx });
 
+    /* ================================= */
     /* 버튼 액션(PC)next */
     pagerDOMpc.btnNext.addEventListener("click", () => {
         /*  */
@@ -117,10 +118,37 @@ document.addEventListener("DOMContentLoaded", async () => {
             $sib.style.zIndex = last_idx - idx;
         });
 
+        /* =============================== */
+
+        /* 데이터 변경 */
+        const $first = $$liMobile.shift();
+        $$liMobile.push($first);
+
+        /* 전부 왼쪽으로 한칸씩 이동 */
+        const aniPromise = $$liMobile.map(($li, idx) => {
+            $li.classList.toggle("on", parseInt($li.dataset.idx) === curr_idx);
+            const left = `calc(var(--_wid-card) * ${idx} - (${idx} * -1 * var(--_gap)))`;
+            const ani = $li.animate([
+                {
+                    transform: `translateX(${left})`,
+                    opacity: (idx === 0 || idx === last_idx) ? 0 : 1
+                }
+            ], {
+                fill: "both",
+                duration: 500,
+                easing: "linear"
+            });
+            return ani;
+        });
+
+        /* =============== */
         /* 최종 다시 버튼 클릭 가능 */
+        // Promise.all([...aniPromise, nextAni]).then(() => {
+        //     pagerDOMpc.btnNext.disabled = false;
+        // });
         nextAni.addEventListener("finish", () => {
             pagerDOMpc.btnNext.disabled = false;
-        }, { once: true });
+        });
     });
 
     /* ================================= */
@@ -191,40 +219,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         lastAni.addEventListener("finish", () => {
+            pagerDOMpc.btnPrev.disabled = false;
             $last.classList.add("on");
             $last.style.zIndex = last_idx + 1;
-            /* 최종 다시 버튼 클릭 가능 */
-            pagerDOMpc.btnPrev.disabled = false;
         }, { once: true });
-    });
 
-    /* ================================= */
-    /* 버튼 액션(MOBILE)next */
-    pagerDOMmobile.btnNext.addEventListener("click", () => {
-        /*  */
-        pagerDOMmobile.btnNext.disabled = true;
-
-        /* idx 정리 */
-        curr_idx++;
-        if (curr_idx > last_idx) {
-            curr_idx = 0;
-        }
-
-        /* pager */
-        pagerDOMmobile.curr.textContent = curr_idx + 1;
-
+        /* ============================= */
         /* 데이터 변경 */
-        const $first = $$liMobile.shift();
-        $$liMobile.push($first);
+        const $lastM = $$liMobile.pop();
+        $$liMobile.unshift($lastM);
 
-        /* 전부 왼쪽으로 한칸씩 이동 */
+        /* 전부 오른른쪽으로 한칸씩 이동 */
         const aniPromise = $$liMobile.map(($li, idx) => {
             $li.classList.toggle("on", parseInt($li.dataset.idx) === curr_idx);
-            const left = `calc(var(--_wid-card) * (${idx}) - (${idx} * -20px))`;
+            const left = `calc(var(--_wid-card) * ${idx} + (${idx} * var(--_gap)))`;
             const ani = $li.animate([
                 {
                     transform: `translateX(${left})`,
-                    opacity: (idx === 0 || idx === last_idx) ? 0  : 1
+                    opacity: (idx === 0 || idx === last_idx) ? 0 : 1
                 }
             ], {
                 fill: "both",
@@ -233,52 +245,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
             return ani;
         });
-        // Promise.all(aniPromise).then(() => {
-
-        // });
 
         /*  */
-        pagerDOMmobile.btnNext.disabled = false;
-    });
-
-    /* ================================= */
-    /* 버튼 액션(MOBILE)prev */
-    pagerDOMmobile.btnPrev.addEventListener("click", () => {
-        /*  */
-        pagerDOMmobile.btnPrev.disabled = true;
-
-        /* idx 정리 */
-        curr_idx--;
-        if (curr_idx < 0) {
-            curr_idx = last_idx;
-        }
-
-        /* pager */
-        pagerDOMmobile.curr.textContent = curr_idx + 1;
-
-        /* 데이터 변경 */
-        const $last = $$liMobile.pop();
-        $$liMobile.unshift($last);
-
-        /* 전부 오른른쪽으로 한칸씩 이동 */
-        $$liMobile.forEach(($li, idx) => {
-            $li.classList.toggle("on", parseInt($li.dataset.idx) === curr_idx);
-            const left = `calc(var(--_wid-card) * (${idx}) - (${idx} * 20px))`;
-            const ani = $li.animate([
-                {
-                    transform: `translateX(${left})`,
-                    opacity: (idx === 0 || idx === last_idx) ? 0  : 1
-                }
-            ], {
-                fill: "both",
-                duration: 500,
-                easing: "linear"
-            });
+        Promise.all([...aniPromise, lastAni]).then(() => {
+            pagerDOMpc.btnPrev.disabled = false;
         });
-        
-        /*  */
-        pagerDOMmobile.btnPrev.disabled = false;
+
     });
+
 });
 
 /**
@@ -317,6 +291,13 @@ function make_dom_pc({ data, $$liPc, pagerDOMpc, last_idx }) {
         $card.appendChild($content);
     });
 
+    return { $ulPc: $ul }
+}//make_dom_pc
+
+/**
+ * 
+ */
+function make_pager({ pagerDOMpc, last_idx }) {
     /* pager */
     const $pager = document.createElement("SECTION");
     $pager.classList.add("pager");
@@ -350,9 +331,7 @@ function make_dom_pc({ data, $$liPc, pagerDOMpc, last_idx }) {
             $info.appendChild($all);
         }
     }//for
-
-    return { $ulPc: $ul }
-}//make_dom_pc
+}//make_pager
 
 function make_dom_mobile({ data, $$liMobile, pagerDOMmobile, last_idx }) {
     const $ulWrap = document.createElement("DIV");
@@ -397,43 +376,12 @@ function make_dom_mobile({ data, $$liMobile, pagerDOMmobile, last_idx }) {
         $$liMobile.unshift($li);
     }
     $$liMobile.forEach(($li, idx) => {
-        const left = `calc((var(--_wid-card) * ${idx}) + (${idx} * 20px))`;
+        const left = `calc((var(--_wid-card) * ${idx}) + (${idx} * var(--_gap)))`;
+        if (idx === 0 || idx === last_idx) {
+            $li.style.opacity = 0;
+        }
         $li.style.transform = `translateX(${left})`;
     });
-
-    /* pager */
-    const $pager = document.createElement("SECTION");
-    $pager.classList.add("pagermobile");
-    $wrap.appendChild($pager);
-
-    for (let i = 0; i < 2; i++) {
-        const btnType = i === 0 ? "prev" : "next";
-        const $btn = document.createElement("BUTTON");
-        $btn.type = "button";
-        $btn.classList.add("pagermobile-btn");
-        $btn.classList.add(btnType);
-        $btn.dataset.action = btnType;
-        $btn.textContent = i === 0 ? "이전" : "다음";
-        $pager.appendChild($btn);
-        pagerDOMmobile[i === 0 ? "btnPrev" : "btnNext"] = $btn;
-
-        if (i === 0) {
-            const $info = document.createElement("DIV");
-            $info.classList.add("pagermobile-info");
-            $pager.appendChild($info);
-
-            const $curr = document.createElement("SPAN");
-            $curr.classList.add("pagermobile-info-curr");
-            $curr.textContent = 1;
-            $info.appendChild($curr);
-            pagerDOMmobile.curr = $curr;
-
-            const $all = document.createElement("SPAN");
-            $all.classList.add("pagermobile-info-all");
-            $all.textContent = last_idx + 1;
-            $info.appendChild($all);
-        }
-    }//for
 
     return { $ulMobile: $ul }
 }//make_dom_mobile
