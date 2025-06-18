@@ -40,7 +40,8 @@
     border:2px solid black;
     border-radius:14px;
     user-select:none;
-    transition:all .2s .5s linear;
+    /* transition:all .2s .5s linear; */
+    transition:all .2s 0s linear;
 }
 .rslide-item.on .rslide-item-card{
     background:#000;

@@ -3,6 +3,11 @@ let degCurr = 0;
 let IDX_CURR = 0;
 let IDX_MAX;
 
+const touchInfo = {
+    start: -1,
+    type: null,
+}
+
 export function make_slider_rotate(data) {
     /* DOM */
     const $viewer = document.createElement("SECTION");
@@ -22,7 +27,7 @@ export function make_slider_rotate(data) {
         const item = data[idx];
         const deg = degPer * idx;
         const $li = make_slide_item({ item, idx, deg });
-        if(idx === 0){$li.classList.add("on");}
+        if (idx === 0) { $li.classList.add("on"); }
         $li.dataset.itemIdx = idx;
         $slide.appendChild($li);
     }
@@ -103,44 +108,131 @@ export function make_pager_rotate(data) {
 /* ============================= */
 
 export function add_spin_rotate_slider() {
+
     const $$btn = document.querySelectorAll(".pager-rotate-btn");
 
     for (const $btn of $$btn) {
-        $btn.addEventListener("click", () => {
+        $btn.addEventListener("click", async () => {
+            $btn.disabled = true;
             const { type } = $btn.dataset;
-            spin_rotate_slider(type);
+            const res = await spin_rotate_slider(type);
+            console.log(res);
+            $btn.disabled = false;
         });
     }
+
+    add_touch_event();
 }//add_spin_rotate_slider
 
-function spin_rotate_slider(type) {
-    const $slider = document.querySelector(".rslide");
-    if (type === "next") {
-        degCurr -= degPer;
-        IDX_CURR++;
-        if (IDX_CURR > IDX_MAX) { IDX_CURR = 0; }
-    } else {
-        degCurr += degPer;
-        IDX_CURR--;
-        if (IDX_CURR < 0) { IDX_CURR = IDX_MAX; }
+/**
+ * 
+*/
+function add_touch_event() {
+    const $viewer = document.querySelector(".rslide-viewer");
+    $viewer.addEventListener("touchstart", on_touch_start, { once: true });
+}//add_touch_event
+
+/**
+ * 
+ * @param {*} e 
+*/
+function on_touch_start(e) {
+    const x = e.changedTouches[0].pageX;
+    touchInfo.start = x;
+    window.addEventListener("touchmove", on_touch_move, { passive: false });
+    window.addEventListener("touchend", on_touch_end, { once: true });
+}//on_touch_start
+
+/**
+ * 
+ * @param {*} e 
+ */
+function on_touch_move(e) {
+    if (touchInfo.start < 0) { return; }
+    const x = e.changedTouches[0].pageX;
+    const moved = touchInfo.start - x;
+    const limit = parseInt(window.innerWidth / 8);
+
+    /* earlt return */
+    if (Math.abs(moved) < limit) {
+        /* 수직이동인 경우 */
+        touchInfo.type = null;
+        return;
     }
+    /* 수직 이동 막은 뒤 슬라이더 움직일 준비 */
+    e.preventDefault();
+    touchInfo.type = moved > 0 ? "next" : "prev";
+}//on_touch_move
 
-    /* 회전 */
-    const ani = $slider.animate([
-        { transform: `translate(-50%,0%) rotate(${degCurr}deg)` }
-    ], {
-        duration: 500,
-        easing: "ease-in",
-        fill: "both"
-    });
+/**
+ * 
+ * @param {*} e 
+*/
+function on_touch_end(e) {
+    window.removeEventListener("touchmove", on_touch_move);
+    add_touch_event();
+    spin_rotate_slider(touchInfo.type);
+    touchInfo.start = -1;
+    touchInfo.type = null;
+}//on_touch_end
 
-    /* 페이저 표시 */
-    const $curr = document.querySelector(".pager-rotate-curr");
-    $curr.textContent = IDX_CURR + 1;
+/**
+ * 
+ * @param {*} type 
+ * @returns 
+ */
+function spin_rotate_slider(type) {
+    if (!type) { return; }
+    return new Promise((res, rej) => {
+        const $slider = document.querySelector(".rslide");
+        if (type === "next") {
+            degCurr -= degPer;
+            IDX_CURR++;
+            if (IDX_CURR > IDX_MAX) { IDX_CURR = 0; }
+        } else {
+            degCurr += degPer;
+            IDX_CURR--;
+            if (IDX_CURR < 0) { IDX_CURR = IDX_MAX; }
+        }
 
-    /* on 표시 */
-    const $$li = document.querySelectorAll(".rslide-item");
-    $$li.forEach($sib =>{
-        $sib.classList.toggle("on", $sib.dataset.itemIdx === String(IDX_CURR));
+        console.log("degCurr", degCurr);
+
+        /* 회전 */
+        const ani = $slider.animate([
+            { transform: `translate(-50%,0%) rotate(${degCurr}deg)` }
+        ], {
+            duration: 500,
+            easing: "ease-in",
+            fill: "both"
+        });
+
+        /* 페이저 표시 */
+        const $curr = document.querySelector(".pager-rotate-curr");
+        $curr.textContent = IDX_CURR + 1;
+
+        /* on 표시 */
+        const $$li = document.querySelectorAll(".rslide-item");
+        $$li.forEach($sib => {
+            $sib.classList.toggle("on", $sib.dataset.itemIdx === String(IDX_CURR));
+        });
+
+        ani.addEventListener("finish", () => {
+            if (degCurr < -360 || degCurr > 360) {
+                degCurr = type === "next" ? -1 * degPer : degPer;
+                const ani2 = $slider.animate([
+                    { transform: `translate(-50%,0%) rotate(${degCurr}deg)` }
+                ], {
+                    duration: 1,
+                    easing: "steps(1,end)",
+                    fill: "both"
+                });
+                ani2.addEventListener("finish",()=>{
+                    res("end(reset)");
+                });
+            } else {
+                res("end");
+            }
+        }, { once: true });
+
     });
 }//spin_rotate_slider
