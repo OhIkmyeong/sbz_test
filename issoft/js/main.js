@@ -1,3 +1,5 @@
+import { add_spin_rotate_slider, make_pager_rotate, make_slider_rotate } from "./rotateSlider.js";
+
 const $wrap = document.querySelector(".board_hongbo3_wrap");
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -26,11 +28,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         last_idx
     });
 
-    const { $ulMobile } = make_dom_mobile({
+    /* 모바일 버젼(평행) */
+    make_dom_mobile({
         data, $$liMobile, pagerDOMmobile, last_idx
     })
 
+    /* 페이저 (pc + 모바일 공통) */
     make_pager({ pagerDOMpc, last_idx });
+    
+    /* ================================= */
+
+    /* 모바일(원형슬라이더 버젼) */
+    const $sliderRotate = make_slider_rotate(data);
+    $wrap.appendChild($sliderRotate);
+
+    /* 페이저(원형슬라이더 버젼) */
+    const $pagerRotate = make_pager_rotate(data);
+    $wrap.appendChild($pagerRotate);
+
+    /* 움직이게 이벤트 더하삼 */
+    add_spin_rotate_slider();
 
     /* ================================= */
     /* 버튼 액션(PC)next */
