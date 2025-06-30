@@ -17,7 +17,6 @@ img {
 
 .slide {
     outline: 3px dotted black;
-    
     position: relative;
     width: 100%;
     max-width: calc(var(--_wid-card) * 2.5);

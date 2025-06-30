@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공유하기 버튼 테스트</title>
+    <!-- <script src="https://developers.kakao.com/sdk/js/kakao.js"></script> -->
+    <script src="./lib/kakao.min.js"></script>
+</head>
+
+<body>
+    <a href="https://twitter.com/intent/tweet?text=공유할%20내용테스트&url=https://www.youtube.com/watch?v=MEC6p1S_5jI"
+        target="_blank">트위터 공유</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.youtube.com/watch?v=MEC6p1S_5jI"
+        target="_blank">페이스북 공유</a>
+    <button id="btn-naver">네이버 공유하기</button>
+    <button id="btn-kakao">카카오톡 공유하기</button>
+    <button id="btn-kakao-2">카카오톡 공유하기(2)</button>
+    <script>
+        const $btnNaver = document.getElementById("btn-naver");
+        const $btnKakao = document.getElementById("btn-kakao");
+        const kakaoAppKey = "d62236b2df51dd719aeb8d0d9bdefec7";
+
+        /* 카카오 */
+        Kakao.init(kakaoAppKey);
+        console.log(Kakao.isInitialized());
+        Kakao.Share.createDefaultButton({
+            container: "#btn-kakao-2",
+            objectType: "feed",
+            content: {
+                title: '이거 내 포트폴리오 홈페이지임 ㅋㅋㅋ',
+                description: '카카오톡 공유하기 버튼 테스트 하고 있어',
+                imageUrl: 'http://127.0.0.1:5502/share_btn_text/img/profile.png',
+                link: {
+                    mobileWebUrl: 'http://127.0.0.1:5502/share_btn_text/index.html',
+                    webUrl: 'http://127.0.0.1:5502/share_btn_text/index.html',
+                }
+            }
+        });
+        $btnKakao.addEventListener("click", () => {
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '이거 내 포트폴리오 홈페이지임 ㅋㅋㅋ',
+                    description: '카카오톡 공유하기 버튼 테스트 하고 있어',
+                    imageUrl: 'http://127.0.0.1:5502/share_btn_text/img/profile.png', // 필수
+                    link: {
+                        mobileWebUrl: 'http://127.0.0.1:5502/share_btn_text/index.html',
+                        webUrl: 'http://127.0.0.1:5502/share_btn_text/index.html'
+                    }
+                }
+            });
+        });
+
+        /* 네이버 버튼 클릭시(카페만 되네) */
+        $btnNaver.addEventListener("click", () => {
+            const url = encodeURI("https://www.youtube.com/watch?v=MEC6p1S_5jI");
+            const title = encodeURI("딥그린의 송곳니 리뷰");
+            const shareURL = "https://share.naver.com/web/shareView?url=" + url + "&title=" + title;
+            // document.location = shareURL;
+            window.open(shareURL, "_blank", "width=600,height=600");
+        });
+    </script>
+</body>
+
+</html>
