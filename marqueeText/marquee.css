@@ -1,0 +1,84 @@
+.mq-wrap {
+    --_gap: 3vw;
+    position: relative;
+    overflow: hidden;
+    width: 90%;
+    margin: 20px auto;
+    border: 1px solid black;
+    font-size: 5vw;
+}
+
+.mq-viewer {
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+}
+
+.mq {
+    flex: none;
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+}
+
+.mq:nth-child(1) {
+    background: rgba(255, 0, 0, .3);
+}
+
+.mq:nth-child(2) {
+    background: rgba(0, 0, 255, .3);
+
+}
+
+/* ======================= */
+/* 움직이는 클래스 */
+.mq.toLeftM200 {
+    animation: mqToLeftM200 5s linear 0s 1 both;
+}
+
+.mq.toLeftM100 {
+    animation: mqToLeftM100 5s linear 0s 1 both;
+}
+
+.mq.toLeftM0 {
+    animation: mqToLeftM0 5s linear 0s 1 both;
+}
+
+/* ======================= */
+/* 애니메이션 */
+@keyframes mqToLeftM200 {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(-200%);
+    }
+}
+
+@keyframes mqToLeftM100 {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes mqToLeftM0 {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+/* ======================= */
+.mq-item {
+    flex: none;
+    position: relative;
+    padding-right: var(--_gap);
+}
