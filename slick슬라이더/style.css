@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+li{list-style-type:none;}
+#viewer{
+    position:relative;
+    overflow:hidden;
+    width:100%;
+    max-width:800px;
+    margin:40px auto;
+    border:1px solid red;
+}
+
+#slider{
+    display:flex;flex-flow:row nowrap;
+    justify-content:flex-start; align-items:center;
+    gap:40px;
+    position:relative;
+}
+
+.slider-item{
+    flex:none;
+    display:flex;
+    justify-content:center; align-items:center;
+    position:relative;
+    width:100%;
+    aspect-ratio:2/1;
+    background:#efefef;
+    border:2px solid black;
+    font-size:5vw;
+    user-select:none;
+    cursor:pointer;
+}
